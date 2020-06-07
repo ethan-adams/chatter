@@ -13,11 +13,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   bool showSpinner = false;
   final _auth = FirebaseAuth.instance;
   String email, password;
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 onChanged: (value) {
                   email = value;
                 },
-                decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+                decoration:
+                    kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
               ),
               SizedBox(
                 height: 8.0,
@@ -58,7 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 onChanged: (value) {
                   password = value;
                 },
-                decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your password'),
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Enter your password'),
               ),
               SizedBox(
                 height: 24.0,
@@ -71,7 +71,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     showSpinner = true;
                   });
                   try {
-                    final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+                    final user = await _auth.signInWithEmailAndPassword(
+                        email: email, password: password);
                     if (user != null) {
                       Navigator.pushNamed(context, ChatScreen.id);
                     }
@@ -79,6 +80,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       showSpinner = false;
                     });
                   } catch (e) {
+                    showDialog<Null>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text('An Error occurred!'),
+                        content: Text('Something went wrong'),
+                        actions: <Widget>[
+                          FlatButton(
+                              child: Text('OK'),
+                              onPressed: () async =>
+                                  Navigator.of(context).pop())
+                        ],
+                      ),
+                    );
                     print('FIREBASE ERROR: ' + e);
                   }
                 },
